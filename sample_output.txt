@@ -1,13 +1,15 @@
-User Type: First-time voter
+Hi! I’m your Election Assistant 👋
 
-Steps:
-1. Register to vote
+User: I’m a first-time voter
+
+Assistant:
+Great! I’ll guide you step-by-step 😊
+
+1. Register yourself as a voter
 2. Check eligibility
-3. Find polling station
+3. Find your polling station
 4. Vote on election day
 
-Timeline:
-Registration → Voting Day → Results
+Tip: Carry a valid ID and try to arrive early
 
-Tips:
-Carry valid ID and reach early
+Hope this helps! Let me know if you need anything else 🙌
