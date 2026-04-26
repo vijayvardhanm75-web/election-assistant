@@ -1,5 +1,6 @@
 # election-assistant
 Interactive AI assistant to guide users through election process
+Designed to simulate a real human assistant guiding users through elections.
 
 # Smart Election Assistant
 
