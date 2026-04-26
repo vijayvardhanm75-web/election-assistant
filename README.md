@@ -3,61 +3,63 @@ Interactive AI assistant to guide users through election process
 
 # Smart Election Assistant
 
-> An interactive AI-based assistant that helps users understand the election process in a simple and personalized way.
+> A human-friendly interactive assistant that helps users understand the election process step-by-step.
 
 ## Problem
-Many people, especially first-time voters, find the election process confusing. They are unsure about registration, timelines, and voting steps.
+Many users, especially first-time voters, find elections confusing—what to do, when to do, and how the process works.
 
 ## My Approach
-Instead of providing static information, I designed an interactive assistant that adapts based on the user type (first-time voter, returning voter, or learner).
+Instead of giving static information, I built a conversational assistant that interacts with users and guides them like a real helper.
 
 ## Solution
-The Smart Election Assistant guides users step-by-step through the election process using simple explanations and personalized flows.
+The assistant asks the user type and provides personalized guidance in a simple, friendly, and easy-to-follow way.
 
 ## Key Features
-- Personalized guidance based on user type  
-- Step-by-step election process  
-- Timeline awareness  
-- Easy-to-understand instructions  
+- Interactive assistant (takes user input)
+- Human-like conversational responses
+- Step-by-step guidance
+- Personalized flow based on user type
 
 ## How It Works
-The assistant first identifies the user type and then provides relevant steps, timelines, and tips accordingly.
+The assistant asks the user whether they are:
+- First-time voter
+- Returning voter
+- Learner
 
-## Example Scenario
-A first-time voter interacts with the assistant:
-- Gets guidance on registration  
-- Learns required documents  
-- Understands voting day steps  
+Based on the input, it provides tailored steps, timelines, and tips.
 
-## Sample Flow
-User: "I am a first-time voter"  
+## Example Interaction
+User: "I’m a first-time voter"
+
 Assistant:
-- Step 1: Register to vote  
-- Step 2: Verify eligibility  
-- Step 3: Find polling station  
-- Step 4: Vote on election day  
+- Guides registration process  
+- Explains voting steps  
+- Gives helpful tips  
+
+## Human-Centered Design
+The assistant is designed to feel natural and helpful rather than robotic, making it easier for users to understand important civic processes.
 
 ## Assumptions
-- Users have access to basic information sources  
-- Election process follows a standard structure  
 - Users need simplified guidance  
+- Basic election structure is followed  
+- Users interact through a simple interface  
 
 ## Future Scope
-- Integration with real-time election data  
-- Mobile app for guidance  
-- Notification reminders for important dates  
+- Web-based assistant  
+- Real-time election updates  
+- Integration with maps for polling locations  
 
 ## Google Services (Concept)
-- Google Maps API for polling station navigation  
-- Firebase for real-time updates  
+- Google Maps for polling navigation  
+- Firebase for real-time alerts  
 - Cloud Run for deployment  
 
 ## Repository Contents
-- prompt.txt → Prompt used  
-- logic.py → Decision logic  
+- prompt.txt → Prompt design  
+- logic.py → Interactive assistant  
 - sample_output.txt → Example output  
 
 ## Impact
 - Helps first-time voters  
-- Simplifies election understanding  
-- Improves civic participation  
+- Improves awareness  
+- Encourages participation
