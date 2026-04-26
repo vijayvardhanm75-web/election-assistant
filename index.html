@@ -755,7 +755,7 @@ Guidelines:
 
   function saveKey() {
     const k = document.getElementById('keyInput').value.trim();
-    if (!k.startsWith('sk-')) {
+    if (!k.startsWith('AIza')) {
       document.getElementById('keyError').style.display = 'block';
       return;
     }
@@ -775,29 +775,27 @@ Guidelines:
     showTyping();
 
     try {
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      const geminiMessages = history.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }]
+      }));
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${userApiKey}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userApiKey}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
-          max_tokens: 500,
-          messages: [
-            { role: 'system', content: SYSTEM },
-            ...history
-          ]
+          system_instruction: { parts: [{ text: SYSTEM }] },
+          contents: geminiMessages
         })
       });
       const data = await res.json();
       if (data.error) {
         removeTyping();
-        addMsg('ai', 'Invalid API key. Please refresh and enter a valid key.');
+        addMsg('ai', 'Invalid API key. Please refresh and enter a valid Gemini key.');
         userApiKey = '';
         return;
       }
-      const reply = data.choices?.[0]?.message?.content || 'Sorry, no response received.';
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, no response received.';
       removeTyping();
       history.push({ role: 'assistant', content: reply });
       addMsg('ai', reply);
@@ -821,12 +819,12 @@ Guidelines:
 <div id="keyModal" style="display:flex;position:fixed;inset:0;z-index:999;background:rgba(10,23,42,0.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
   <div style="background:#fff;border-radius:16px;padding:32px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);font-family:'DM Sans',sans-serif;">
     <div style="font-size:32px;margin-bottom:12px;">🔑</div>
-    <h2 style="font-family:'Fraunces',serif;font-size:22px;color:#0A2342;margin-bottom:8px;">Enter your OpenAI API Key</h2>
-    <p style="font-size:13px;color:#6B849A;line-height:1.6;margin-bottom:20px;">This app uses OpenAI to power the election assistant. Your key stays only in your browser and is never stored or shared.</p>
-    <input id="keyInput" type="password" placeholder="sk-..." onkeydown="if(event.key==='Enter')saveKey()" style="width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:#0A2342;outline:none;margin-bottom:8px;background:#F7F3EC;"/>
-    <div id="keyError" style="display:none;font-size:12px;color:#C0392B;margin-bottom:10px;">Please enter a valid OpenAI key starting with "sk-"</div>
+    <h2 style="font-family:'Fraunces',serif;font-size:22px;color:#0A2342;margin-bottom:8px;">Enter your Gemini API Key</h2>
+    <p style="font-size:13px;color:#6B849A;line-height:1.6;margin-bottom:20px;">This app uses Google Gemini to power the election assistant. Your key stays only in your browser and is never stored or shared.</p>
+    <input id="keyInput" type="password" placeholder="AIza..." onkeydown="if(event.key==='Enter')saveKey()" style="width:100%;border:1.5px solid #e0e0e0;border-radius:10px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:#0A2342;outline:none;margin-bottom:8px;background:#F7F3EC;"/>
+    <div id="keyError" style="display:none;font-size:12px;color:#C0392B;margin-bottom:10px;">Please enter a valid Gemini key starting with "AIza"</div>
     <button onclick="saveKey()" style="width:100%;background:#0A2342;color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;">Start using Election Assistant →</button>
-    <p style="font-size:11px;color:#aaa;text-align:center;margin-top:14px;">Get a free key at <a href="https://platform.openai.com/api-keys" target="_blank" style="color:#1A6BAA;">platform.openai.com</a></p>
+    <p style="font-size:11px;color:#aaa;text-align:center;margin-top:14px;">Get a free key at <a href="https://aistudio.google.com" target="_blank" style="color:#1A6BAA;">aistudio.google.com</a></p>
   </div>
 </div>
 
