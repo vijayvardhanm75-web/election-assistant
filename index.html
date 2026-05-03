@@ -10,6 +10,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELECTION2025"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ELECTION2025');
+  </script>
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-placeholder&callback=initMap&libraries=places" async defer></script>
   <style>
     :root {
       --navy: #0A2342;
@@ -494,7 +504,7 @@
 </head>
 <body>
 
-<header>
+<header role="banner" aria-label="Election Assistant Navigation">
   <div class="logo">
     <div class="logo-icon">🗳️</div>
     <span class="logo-text">Election Assistant</span>
@@ -525,33 +535,33 @@
   <div class="hero-stripe"></div>
 </section>
 
-<main class="main">
+<main class="main" role="main" aria-label="Election Assistant Content">
   <div class="left-col">
 
     <div class="section-label">Explore by Topic</div>
     <div class="topics-grid">
-      <div class="topic-card" onclick="ask('How do I register as a voter? What documents do I need?')">
+      <div class="topic-card" onclick="ask('How do I register as a voter? What documents do I need?')" role="button" aria-label="Learn about voter registration" tabindex="0">
         <div class="topic-emoji" style="background:#E6F1FB;">📋</div>
         <div class="topic-info">
           <h3>Voter Registration</h3>
           <p>Eligibility, Form 6, deadlines & Voter ID</p>
         </div>
       </div>
-      <div class="topic-card" onclick="ask('What happens on election day? Walk me through voting at a polling booth.')">
+      <div class="topic-card" onclick="ask('What happens on election day? Walk me through voting at a polling booth.')" role="button" aria-label="Learn about polling day" tabindex="0">
         <div class="topic-emoji" style="background:#FFF0E3;">🗳️</div>
         <div class="topic-info">
           <h3>Polling Day</h3>
           <p>Booth process, EVM, VVPAT & timings</p>
         </div>
       </div>
-      <div class="topic-card" onclick="ask('How are votes counted? How is the winner declared in an Indian election?')">
+      <div class="topic-card" onclick="ask('How are votes counted? How is the winner declared in an Indian election?')" role="button" aria-label="Learn about vote counting" tabindex="0">
         <div class="topic-emoji" style="background:#E6F8EF;">📊</div>
         <div class="topic-info">
           <h3>Vote Counting</h3>
           <p>Counting day, trends & result declaration</p>
         </div>
       </div>
-      <div class="topic-card" onclick="ask('What is the Model Code of Conduct in elections? What does it allow and ban?')">
+      <div class="topic-card" onclick="ask('What is the Model Code of Conduct in elections? What does it allow and ban?')" role="button" aria-label="Learn about Model Code of Conduct" tabindex="0">
         <div class="topic-emoji" style="background:#F0EEFE;">⚖️</div>
         <div class="topic-info">
           <h3>Model Code of Conduct</h3>
@@ -682,15 +692,50 @@
     </div>
 
     <div class="chat-input-bar">
-      <input type="text" id="chatInput" placeholder="Ask about elections..." onkeydown="if(event.key==='Enter') sendMsg()" />
-      <button class="send-btn" onclick="sendMsg()">
+      <input type="text" id="chatInput" placeholder="Ask about elections..." onkeydown="if(event.key==='Enter') sendMsg()" aria-label="Type your election question here" role="textbox" />
+      <button class="send-btn" onclick="sendMsg()" aria-label="Send message">
         <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
       </button>
     </div>
   </div>
 </main>
 
-<footer>
+<!-- Google Maps Polling Booth Locator -->
+<section style="background:#fff; border-top:1px solid rgba(10,35,66,0.1); padding:40px 24px;" aria-label="Polling Booth Locator">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+      <div style="width:36px;height:36px;background:#E6F1FB;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;">📍</div>
+      <div>
+        <h2 style="font-family:'Fraunces',serif;font-size:22px;color:#0A2342;margin:0;">Find Your Polling Booth</h2>
+        <p style="font-size:13px;color:#6B849A;margin:2px 0 0;">Search for polling booths near your location using Google Maps</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin:20px 0 16px;flex-wrap:wrap;">
+      <input id="boothSearch" type="text" placeholder="Enter your area or pincode..." aria-label="Search polling booth by area or pincode"
+        style="flex:1;min-width:220px;border:1.5px solid rgba(10,35,66,0.15);border-radius:10px;padding:11px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:#0A2342;outline:none;background:#F7F3EC;" />
+      <button onclick="searchBooth()" aria-label="Search for polling booths"
+        style="background:#0A2342;color:#fff;border:none;border-radius:10px;padding:11px 24px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;">
+        🔍 Search
+      </button>
+      <button onclick="useMyLocation()" aria-label="Use my current location to find booths"
+        style="background:#138855;color:#fff;border:none;border-radius:10px;padding:11px 24px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;">
+        📍 Use My Location
+      </button>
+    </div>
+    <div id="map" style="width:100%;height:380px;border-radius:14px;border:1px solid rgba(10,35,66,0.1);background:#E8F4FD;display:flex;align-items:center;justify-content:center;" role="region" aria-label="Google Map showing polling booths">
+      <div style="text-align:center;color:#6B849A;">
+        <div style="font-size:40px;margin-bottom:12px;">🗺️</div>
+        <p style="font-size:14px;font-weight:500;">Enter your area above to find nearby polling booths</p>
+        <p style="font-size:12px;margin-top:4px;">Or click "Use My Location" for instant results</p>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#6B849A;margin-top:10px;text-align:center;">
+      💡 Tip: You can also find your polling booth at <a href="https://voterportal.eci.gov.in" target="_blank" style="color:#1A6BAA;">voterportal.eci.gov.in</a> using your Voter ID
+    </p>
+  </div>
+</section>
+
+<footer role="contentinfo" aria-label="Footer">
   <span>Election Assistant</span> — An AI-powered civic education tool &nbsp;|&nbsp; Built for Challenge 2
 </footer>
 
@@ -819,6 +864,102 @@
     sendMsg();
     document.getElementById('chatPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  // Google Maps polling booth locator
+  let map, service;
+
+  function initMap() {
+    const india = { lat: 20.5937, lng: 78.9629 };
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: india,
+      zoom: 5,
+      mapTypeControl: false,
+      streetViewControl: false,
+      styles: [
+        { featureType: 'poi', elementType: 'labels', stylers: [{ visibility: 'off' }] }
+      ]
+    });
+    service = new google.maps.places.PlacesService(map);
+  }
+
+  function searchBooth() {
+    const query = document.getElementById('boothSearch').value.trim();
+    if (!query) return;
+    if (!map) {
+      showMapFallback(query);
+      return;
+    }
+    const request = {
+      query: 'polling booth ' + query + ' India',
+      fields: ['name', 'geometry', 'formatted_address']
+    };
+    service.findPlaceFromQuery(request, function(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+        map.setCenter(results[0].geometry.location);
+        map.setZoom(14);
+        new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location,
+          title: results[0].name,
+          icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }
+        });
+      }
+    });
+  }
+
+  function useMyLocation() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+      if (!map) {
+        showMapFallback('my location');
+        return;
+      }
+      map.setCenter(loc);
+      map.setZoom(14);
+      new google.maps.Marker({
+        map: map,
+        position: loc,
+        title: 'Your Location',
+        icon: { url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' }
+      });
+      const request = {
+        location: loc,
+        radius: 3000,
+        keyword: 'polling booth election booth voting centre'
+      };
+      service.nearbySearch(request, function(results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          results.forEach(function(place) {
+            new google.maps.Marker({
+              map: map,
+              position: place.geometry.location,
+              title: place.name,
+              icon: { url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png' }
+            });
+          });
+        }
+      });
+    }, function() {
+      alert('Unable to get your location. Please enter your area manually.');
+    });
+  }
+
+  function showMapFallback(query) {
+    const mapDiv = document.getElementById('map');
+    const encoded = encodeURIComponent('polling booth ' + query + ' India');
+    mapDiv.innerHTML = '<iframe width="100%" height="380" style="border:0;border-radius:14px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyD-placeholder&q=' + encoded + '" title="Polling booth map"></iframe>';
+  }
+
+  // Keyboard accessibility for topic cards
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && e.target.classList.contains('topic-card')) {
+      e.target.click();
+    }
+  });
 
 </script>
 
