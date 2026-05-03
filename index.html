@@ -10,16 +10,39 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ELECTION2025"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ELECTION2025');
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+    import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZB99KR2x-SpRPMiZlv_Df10IkYOlyY5U",
+      authDomain: "election-assistant-7cf15.firebaseapp.com",
+      projectId: "election-assistant-7cf15",
+      storageBucket: "election-assistant-7cf15.firebasestorage.app",
+      messagingSenderId: "938144956432",
+      appId: "1:938144956432:web:ec619754ef00acb271ca95",
+      measurementId: "G-40F35PZQHP"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // Log page view
+    logEvent(analytics, 'page_view', { page_title: 'Election Assistant' });
+
+    // Expose to global scope for use in chat
+    window.fbDb = db;
+    window.fbCollection = collection;
+    window.fbAddDoc = addDoc;
+    window.fbTimestamp = serverTimestamp;
+    window.fbLogEvent = (name, params) => logEvent(analytics, name, params);
+    window.firebaseReady = true;
   </script>
   <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-placeholder&callback=initMap&libraries=places" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZB99KR2x-SpRPMiZlv_Df10IkYOlyY5U&callback=initMap&libraries=places" async defer></script>
   <style>
     :root {
       --navy: #0A2342;
@@ -851,11 +874,29 @@
 
     addMsg('user', text);
 
+    // Save query to Firestore
+    if (window.firebaseReady && window.fbDb) {
+      window.fbAddDoc(window.fbCollection(window.fbDb, 'queries'), {
+        question: text,
+        timestamp: window.fbTimestamp(),
+        source: 'election-assistant'
+      }).catch(() => {});
+      window.fbLogEvent('question_asked', { question_type: text.substring(0, 50) });
+    }
+
     showTyping();
     setTimeout(() => {
       removeTyping();
       const reply = getAnswer(text);
       addMsg('ai', reply);
+      // Save response to Firestore
+      if (window.firebaseReady && window.fbDb) {
+        window.fbAddDoc(window.fbCollection(window.fbDb, 'interactions'), {
+          question: text,
+          answered: true,
+          timestamp: window.fbTimestamp()
+        }).catch(() => {});
+      }
     }, 800);
   }
 
@@ -951,7 +992,7 @@
   function showMapFallback(query) {
     const mapDiv = document.getElementById('map');
     const encoded = encodeURIComponent('polling booth ' + query + ' India');
-    mapDiv.innerHTML = '<iframe width="100%" height="380" style="border:0;border-radius:14px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyD-placeholder&q=' + encoded + '" title="Polling booth map"></iframe>';
+    mapDiv.innerHTML = '<iframe width="100%" height="380" style="border:0;border-radius:14px;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps/embed/v1/search?key=AIzaSyAZB99KR2x-SpRPMiZlv_Df10IkYOlyY5U&q=' + encoded + '" title="Polling booth map"></iframe>';
   }
 
   // Keyboard accessibility for topic cards
