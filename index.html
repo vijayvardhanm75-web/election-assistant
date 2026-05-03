@@ -1,58 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Election Assistant — Your Smart Civic Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A2342;
+      --navy-mid: #133A5E;
+      --blue: #1A6BAA;
+      --blue-light: #2D8DD6;
+      --saffron: #E8781A;
+      --saffron-light: #F5A24B;
+      --green: #138855;
+      --green-light: #1DB974;
+      --cream: #F7F3EC;
+      --cream-dark: #EDE7DC;
+      --text-dark: #0A1929;
+      --text-mid: #3D5166;
+      --text-light: #6B849A;
+      --white: #FFFFFF;
+      --border: rgba(10,35,66,0.1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: var(--navy);
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      border-bottom: 2px solid var(--saffron);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--saffron);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .logo-text {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: -0.3px;
+    }
+    .header-badge {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--saffron-light);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--navy);
+      padding: 60px 32px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(26,107,170,0.3) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(232,120,26,0.15) 0%, transparent 50%);
+    }
+    .hero-stripe {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--saffron) 33%, var(--white) 33% 66%, var(--green) 66%);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green-light);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.3); } }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--saffron-light);
+    }
+    .hero p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      max-width: 480px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+      position: relative;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      position: relative;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Fraunces', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+    .stat-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .main { grid-template-columns: 1fr; }
+    }
+
+    /* ─── QUICK TOPICS ─── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .topic-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .topic-card:hover {
+      border-color: var(--blue-light);
+      box-shadow: 0 4px 20px rgba(26,107,170,0.1);
+      transform: translateY(-1px);
+    }
+    .topic-emoji {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .topic-info h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .topic-info p {
+      font-size: 12px;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    /* ─── TIMELINE ─── */
+    .timeline-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+    .timeline-card h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+
+    .tl-step {
+      display: flex;
+      gap: 16px;
+      cursor: pointer;
+      padding: 10px 8px;
+      border-radius: 10px;
+      transition: background 0.15s;
+    }
+    .tl-step:hover { background: var(--cream); }
+    .tl-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 36px;
+    }
+    .tl-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .tl-connector {
+      width: 2px;
+      flex: 1;
+      min-height: 20px;
+      margin: 4px 0;
+      border-radius: 1px;
+    }
+    .tl-step:last-child .tl-connector { display: none; }
+    .tl-body { flex: 1; padding-top: 6px; padding-bottom: 10px; }
+    .tl-title { font-size: 14px; font-weight: 500; color: var(--text-dark); margin-bottom: 3px; }
+    .tl-desc { font-size: 12px; color: var(--text-light); line-height: 1.5; }
+    .tl-tag {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* ─── CHAT PANEL ─── */
+    .chat-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      position: sticky;
+      top: 76px;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 100px);
+      max-height: 680px;
+      min-height: 500px;
+    }
+    .chat-head {
+      background: var(--navy);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ai-avatar {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .chat-head-info h3 { font-size: 14px; font-weight: 500; color: var(--white); }
+    .chat-head-info p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 1px; }
+    .live-badge {
+      margin-left: auto;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px;
+      color: var(--green-light);
+      font-weight: 500;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green-light);
+      animation: pulse 2s infinite;
+    }
+
+    .chat-msgs {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--cream);
+    }
+    .chat-msgs::-webkit-scrollbar { width: 4px; }
+    .chat-msgs::-webkit-scrollbar-track { background: transparent; }
+    .chat-msgs::-webkit-scrollbar-thumb { background: var(--cream-dark); border-radius: 2px; }
+
+    .bubble-row {
+      display: flex;
+      gap: 8px;
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp { from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
+    .bubble-row.user { flex-direction: row-reverse; }
+    .bubble-av {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .bubble-av.ai { background: var(--navy); color: var(--white); font-size: 14px; }
+    .bubble-av.user { background: var(--saffron); color: var(--white); }
+    .bubble {
+      max-width: 85%;
+      padding: 12px 15px;
+      border-radius: 14px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-dark);
+    }
+    .bubble.ai {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .bubble.user {
+      background: var(--navy);
+      color: var(--white);
+      border-bottom-right-radius: 4px;
+    }
+    .typing {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 4px 2px;
+    }
+    .typing span {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--text-light);
+      animation: blink 1.3s infinite;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%,60%,100%{ transform:translateY(0); opacity:0.4; } 30%{ transform:translateY(-5px); opacity:1; } }
+
+    .suggestions {
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      border-top: 1px solid var(--border);
+      background: var(--white);
+    }
+    .sugg-btn {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.15s;
+    }
+    .sugg-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+    .chat-input-bar {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--white);
+    }
+    .chat-input-bar input {
+      flex: 1;
+      border: 1.5px solid var(--border);
+      border-radius: 24px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .chat-input-bar input:focus { border-color: var(--blue-light); background: var(--white); }
+    .send-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .send-btn:hover { background: var(--blue); }
+    .send-btn svg { width: 16px; height: 16px; fill: white; margin-left: 2px; }
+
+    /* ─── INFO CARDS ─── */
+    .info-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 0;
+    }
+    .info-chip {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.18s;
+      text-align: center;
+    }
+    .info-chip:hover { border-color: var(--saffron); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(232,120,26,0.1); }
+    .info-chip-icon { font-size: 22px; margin-bottom: 8px; }
+    .info-chip-title { font-size: 13px; font-weight: 500; color: var(--text-dark); margin-bottom: 3px; }
+    .info-chip-sub { font-size: 11px; color: var(--text-light); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--navy);
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      border-top: 2px solid var(--saffron);
+    }
+    footer span { color: rgba(255,255,255,0.6); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🗳️</div>
+    <span class="logo-text">Election Assistant</span>
+  </div>
+  <div class="header-badge">AI-Powered Civic Guide</div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">Live AI Assistant</div>
+  <h1>Understand <em>Elections</em>,<br>Step by Step</h1>
+  <p>Your intelligent guide to the entire election process — from voter registration to result declaration.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Process Stages</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">AI</div>
+      <div class="stat-label">Powered Chat</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Available</div>
+    </div>
+  </div>
+  <div class="hero-stripe"></div>
+</section>
+
+<main class="main">
+  <div class="left-col">
+
+    <div class="section-label">Explore by Topic</div>
+    <div class="topics-grid">
+      <div class="topic-card" onclick="ask('How do I register as a voter? What documents do I need?')">
+        <div class="topic-emoji" style="background:#E6F1FB;">📋</div>
+        <div class="topic-info">
+          <h3>Voter Registration</h3>
+          <p>Eligibility, Form 6, deadlines & Voter ID</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="ask('What happens on election day? Walk me through voting at a polling booth.')">
+        <div class="topic-emoji" style="background:#FFF0E3;">🗳️</div>
+        <div class="topic-info">
+          <h3>Polling Day</h3>
+          <p>Booth process, EVM, VVPAT & timings</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="ask('How are votes counted? How is the winner declared in an Indian election?')">
+        <div class="topic-emoji" style="background:#E6F8EF;">📊</div>
+        <div class="topic-info">
+          <h3>Vote Counting</h3>
+          <p>Counting day, trends & result declaration</p>
+        </div>
+      </div>
+      <div class="topic-card" onclick="ask('What is the Model Code of Conduct in elections? What does it allow and ban?')">
+        <div class="topic-emoji" style="background:#F0EEFE;">⚖️</div>
+        <div class="topic-info">
+          <h3>Model Code of Conduct</h3>
+          <p>Rules during election period</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-card">
+      <h2>The Election Journey</h2>
+
+      <div class="tl-step" onclick="ask('Tell me more about election announcement and what the Election Commission does to kick off elections.')">
+        <div class="tl-left">
+          <div class="tl-num" style="background:#E6F1FB; color:#1A6BAA;">1</div>
+          <div class="tl-connector" style="background:#E6F1FB;"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-title">Election Announcement</div>
+          <div class="tl-desc">Election Commission announces schedule and dates. Model Code of Conduct comes into effect immediately.</div>
+          <span class="tl-tag" style="background:#E6F1FB; color:#1A6BAA;">Week 1–2</span>
+        </div>
+      </div>
+
+      <div class="tl-step" onclick="ask('How does the nomination process work for candidates in an Indian election?')">
+        <div class="tl-left">
+          <div class="tl-num" style="background:#FFF0E3; color:#E8781A;">2</div>
+          <div class="tl-connector" style="background:#FFF0E3;"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-title">Nominations & Candidacy</div>
+          <div class="tl-desc">Candidates file nomination papers. Scrutiny by Returning Officer. Withdrawal window opens.</div>
+          <span class="tl-tag" style="background:#FFF0E3; color:#E8781A;">Week 2–3</span>
+        </div>
+      </div>
+
+      <div class="tl-step" onclick="ask('What are the rules and restrictions during the election campaigning period?')">
+        <div class="tl-left">
+          <div class="tl-num" style="background:#F0EEFE; color:#5B4CC4;">3</div>
+          <div class="tl-connector" style="background:#F0EEFE;"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-title">Campaigning Period</div>
+          <div class="tl-desc">Parties and candidates campaign. Strict silent period 48 hours before polling begins.</div>
+          <span class="tl-tag" style="background:#F0EEFE; color:#5B4CC4;">Week 3–5</span>
+        </div>
+      </div>
+
+      <div class="tl-step" onclick="ask('What happens on polling day? How does an Indian voter cast their vote using EVM?')">
+        <div class="tl-left">
+          <div class="tl-num" style="background:#E6F8EF; color:#138855;">4</div>
+          <div class="tl-connector" style="background:#E6F8EF;"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-title">Polling Day</div>
+          <div class="tl-desc">Voters cast votes at assigned booths using EVMs. VVPAT slip confirms the vote. Indelible ink marks finger.</div>
+          <span class="tl-tag" style="background:#E6F8EF; color:#138855;">Polling Day</span>
+        </div>
+      </div>
+
+      <div class="tl-step" onclick="ask('How does the vote counting process work on counting day and how is the final result declared?')">
+        <div class="tl-left">
+          <div class="tl-num" style="background:#FFEAEA; color:#C0392B;">5</div>
+          <div class="tl-connector" style="background:#FFEAEA;"></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-title">Counting & Result</div>
+          <div class="tl-desc">EVMs opened, votes tallied round by round. Winner declared by Returning Officer and certificate issued.</div>
+          <span class="tl-tag" style="background:#FFEAEA; color:#C0392B;">Result Day</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Quick Facts</div>
+    <div class="info-strip">
+      <div class="info-chip" onclick="ask('What is an EVM and a VVPAT? How do they work together in Indian elections?')">
+        <div class="info-chip-icon">🖥️</div>
+        <div class="info-chip-title">EVM & VVPAT</div>
+        <div class="info-chip-sub">How your vote is recorded</div>
+      </div>
+      <div class="info-chip" onclick="ask('Am I eligible to vote in India? What are the age and citizenship requirements?')">
+        <div class="info-chip-icon">✅</div>
+        <div class="info-chip-title">Am I Eligible?</div>
+        <div class="info-chip-sub">Voter eligibility criteria</div>
+      </div>
+      <div class="info-chip" onclick="ask('What is the role of the Election Commission of India in conducting elections?')">
+        <div class="info-chip-icon">🏛️</div>
+        <div class="info-chip-title">Election Commission</div>
+        <div class="info-chip-sub">Who runs elections?</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── CHAT PANEL ─── -->
+  <div class="chat-panel" id="chatPanel">
+    <div class="chat-head">
+      <div class="ai-avatar">🤖</div>
+      <div class="chat-head-info">
+        <h3>Election Assistant</h3>
+        <p>Smart Election Guide</p>
+      </div>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        Live
+      </div>
+    </div>
+
+    <div class="chat-msgs" id="chatMsgs">
+      <div class="bubble-row">
+        <div class="bubble-av ai">🤖</div>
+        <div class="bubble ai">
+          👋 Hello! I'm your Election Guide.<br><br>
+          Ask me anything about:<br>
+          • Voter registration &amp; eligibility<br>
+          • Polling booth process<br>
+          • EVMs &amp; how votes are counted<br>
+          • Model Code of Conduct<br>
+          • Full election timelines<br><br>
+          Or tap any topic on the left to get started!
+        </div>
+      </div>
+    </div>
+
+    <div class="suggestions" id="suggestions">
+      <button class="sugg-btn" onclick="ask('How do I check my name on the voter list?')">Check voter list</button>
+      <button class="sugg-btn" onclick="ask('What ID do I need to bring on polling day?')">Polling day ID</button>
+      <button class="sugg-btn" onclick="ask('Can I vote if I am away from my home constituency?')">Voting away from home</button>
+    </div>
+
+    <div class="chat-input-bar">
+      <input type="text" id="chatInput" placeholder="Ask about elections..." onkeydown="if(event.key==='Enter') sendMsg()" />
+      <button class="send-btn" onclick="sendMsg()">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>Election Assistant</span> — An AI-powered civic education tool &nbsp;|&nbsp; Built for Challenge 2
+</footer>
+
 <script>
-const chatMsgs = document.getElementById('chatMsgs');
-const chatInput = document.getElementById('chatInput');
+  const SYSTEM = `You are a friendly, knowledgeable Election Process Guide assistant. You help citizens understand elections clearly and confidently.
 
-function addMsg(role, text) {
-  const msg = document.createElement('div');
-  msg.innerHTML = `<b>${role}:</b> ${text}`;
-  chatMsgs.appendChild(msg);
-}
+Topics you cover: voter registration, polling process, EVM and VVPAT machines, vote counting, election timelines, Model Code of Conduct, Election Commission of India, candidate nominations, election results, and general civic education.
 
-function showTyping() {
-  const typing = document.createElement('div');
-  typing.id = "typing";
-  typing.innerText = "Assistant is typing...";
-  chatMsgs.appendChild(typing);
-}
+Guidelines:
+- Answer in a warm, clear, easy-to-understand way
+- Use numbered steps when explaining a process
+- Keep responses under 200 words — concise and helpful
+- Use Indian election context by default (ECI, EVM, VVPAT, Lok Sabha, constituency, Returning Officer, Form 6, EPIC, etc.)
+- Never discuss specific political parties or candidates
+- End each response with a short follow-up question to encourage learning
+- Use simple language — assume the user may be a first-time voter`;
 
-function removeTyping() {
-  const t = document.getElementById("typing");
-  if (t) t.remove();
-}
+  let history = [];
 
-async function sendMsg(override) {
-  const text = (override || chatInput.value).trim();
-  if (!text) return;
+  const chatMsgs = document.getElementById('chatMsgs');
+  const chatInput = document.getElementById('chatInput');
 
-  chatInput.value = '';
-  addMsg('You', text);
+  function scrollDown() {
+    chatMsgs.scrollTop = chatMsgs.scrollHeight;
+  }
 
-  showTyping();
+  function addMsg(role, text) {
+    const row = document.createElement('div');
+    row.className = 'bubble-row' + (role === 'user' ? ' user' : '');
 
-  // 🔥 REPLACED API WITH SMART RESPONSE
-  setTimeout(() => {
-    removeTyping();
+    const av = document.createElement('div');
+    av.className = 'bubble-av ' + (role === 'user' ? 'user' : 'ai');
+    av.textContent = role === 'user' ? 'You' : '🤖';
 
-    let reply = "";
-    const q = text.toLowerCase();
+    const bub = document.createElement('div');
+    bub.className = 'bubble ' + role;
+    bub.innerHTML = text.replace(/\n/g, '<br>');
 
-    if (q.includes("register")) {
-      reply = "To register as a voter:\n1. Fill Form 6\n2. Submit ID proof (Aadhaar/Passport)\n3. Verify your details\n\nWould you like the official registration link?";
-    } 
-    else if (q.includes("vote")) {
-      reply = "On voting day:\n1. Visit your polling booth\n2. Show valid ID\n3. Cast your vote using EVM\n\nWould you like to know accepted ID types?";
-    } 
-    else if (q.includes("evm")) {
-      reply = "EVM (Electronic Voting Machine) allows you to securely cast your vote by pressing a button next to your chosen candidate.";
+    row.appendChild(av);
+    row.appendChild(bub);
+    chatMsgs.appendChild(row);
+    scrollDown();
+    return bub;
+  }
+
+  function showTyping() {
+    const row = document.createElement('div');
+    row.className = 'bubble-row';
+    row.id = 'typingRow';
+    row.innerHTML = `<div class="bubble-av ai">🤖</div><div class="bubble ai"><div class="typing"><span></span><span></span><span></span></div></div>`;
+    chatMsgs.appendChild(row);
+    scrollDown();
+  }
+
+  function removeTyping() {
+    document.getElementById('typingRow')?.remove();
+  }
+
+  // ── SMART ELECTION BOT (No API needed) ──
+  const kb = [
+    {
+      keys: ['register','registration','form 6','voter id','epic','enroll','how to vote','sign up'],
+      answer: `To register as a voter in India, follow these steps:\n\n1. Visit voterportal.eci.gov.in or use the Voter Helpline App\n2. Fill Form 6 (for new registration) with your details\n3. Documents needed: Aadhaar card / passport / driving licence (proof of identity) + proof of address\n4. Submit online or at your nearest BLO (Booth Level Officer)\n5. Your name will appear on the electoral roll within 30 days\n\nEligibility: Indian citizen, 18+ years old, ordinary resident of the constituency.\n\nWould you like to know how to check if your name is already on the voter list? 😊`
+    },
+    {
+      keys: ['check name','voter list','electoral roll','name on list'],
+      answer: `Here's how to check your name on the voter list:\n\n1. Go to electoralsearch.eci.gov.in\n2. Enter your name, date of birth, and state\n3. OR use your EPIC (Voter ID) number to search directly\n4. You can also call the Voter Helpline: 1950\n\nIf your name is missing, you can apply for inclusion using Form 6 on the voter portal.\n\nWould you like to know what documents to carry on polling day? 😊`
+    },
+    {
+      keys: ['polling day','election day','booth','cast vote','voting process','how to vote at'],
+      answer: `Here's what happens on polling day:\n\n1. Find your assigned polling booth using the Voter Helpline App or voterportal.eci.gov.in\n2. Carry your EPIC (Voter ID) or any approved photo ID (Aadhaar, passport, driving licence)\n3. At the booth, your name is verified in the electoral roll\n4. You'll receive a ballot slip and be directed to the EVM\n5. Press the button next to your chosen candidate on the EVM\n6. A VVPAT slip will appear for 7 seconds to confirm your vote\n7. Indelible ink is applied to your left index finger\n\nPolling hours are typically 7 AM to 6 PM.\n\nWould you like to know how EVMs and VVPATs work? 😊`
+    },
+    {
+      keys: ['evm','vvpat','electronic voting','machine','ballot'],
+      answer: `Here's how EVM and VVPAT work:\n\n🖥️ EVM (Electronic Voting Machine):\n• Has two units — Control Unit (with officer) and Balloting Unit (with voter)\n• Lists all candidates with their symbols and a button next to each\n• Press the button to cast your vote — a beep confirms it\n• Each EVM can record up to 2,000 votes\n\n🖨️ VVPAT (Voter Verifiable Paper Audit Trail):\n• Connected to the EVM\n• After you vote, a paper slip appears showing candidate name and symbol\n• Slip is visible for 7 seconds then falls into a sealed box\n• Allows you to verify your vote was recorded correctly\n\nBoth devices are sealed, tamper-proof and tested before each election.\n\nWould you like to know about the vote counting process? 😊`
+    },
+    {
+      keys: ['count','counting','result','declare','winner','tally'],
+      answer: `Here's how vote counting works:\n\n1. Counting Day is announced by the Election Commission\n2. EVMs are brought from strong rooms under heavy security\n3. Counting agents from each party are present\n4. Votes are counted round by round — one round per assembly segment\n5. Results are displayed on a large board after each round\n6. The candidate with the highest votes wins (First Past The Post system)\n7. Returning Officer declares the winner and issues a certificate\n8. Results are officially published in the Gazette\n\nThe entire process is live-streamed and monitored by election observers.\n\nWould you like to know about the full election timeline? 😊`
+    },
+    {
+      keys: ['model code','mcc','conduct','rules during election','campaign rules','what is banned'],
+      answer: `The Model Code of Conduct (MCC) is a set of rules that kicks in once elections are announced:\n\n✅ Allowed:\n• Campaigning with prior police permission\n• Manifesto release (must be justifiable)\n• Door-to-door canvassing\n\n❌ Banned:\n• Use of government resources for campaigning\n• Bribing voters with cash, gifts or liquor\n• Hate speech or communal appeals\n• Defacing public property with posters\n• New government schemes or announcements\n\n⏰ Silent Period:\n• All campaigning stops 48 hours before polling\n• No exit polls until polling ends\n\nViolations can lead to disqualification of candidates.\n\nWould you like to know about the role of the Election Commission? 😊`
+    },
+    {
+      keys: ['election commission','eci','who runs','commission of india','chief election'],
+      answer: `The Election Commission of India (ECI) is the constitutional body that conducts free and fair elections:\n\n🏛️ Structure:\n• Led by the Chief Election Commissioner (CEC)\n• Assisted by two Election Commissioners\n• Appointed by the President of India\n\n📋 Key Responsibilities:\n• Announces election schedule and dates\n• Enforces the Model Code of Conduct\n• Deploys central forces for security\n• Appoints Returning Officers for each constituency\n• Monitors campaign spending\n• Addresses election-related complaints\n\nThe ECI operates independently and cannot be pressured by any government.\n\nWould you like to know about the nomination process for candidates? 😊`
+    },
+    {
+      keys: ['nomination','candidate','file','withdraw','scrutiny','returning officer'],
+      answer: `Here's how the candidate nomination process works:\n\n1. Candidate collects nomination form from the Returning Officer (RO)\n2. Form is filled with personal details, assets, criminal record (if any)\n3. Nomination filed with RO along with a security deposit\n   • ₹25,000 for Lok Sabha | ₹12,500 for State Assembly\n4. RO scrutinises the nomination for validity\n5. Candidates can withdraw within the withdrawal deadline\n6. Final list of candidates is published\n\n📋 Eligibility to contest:\n• Indian citizen, 25+ years for Lok Sabha\n• Not holding any office of profit under government\n• Not declared bankrupt or of unsound mind\n\nWould you like to know about the campaigning rules? 😊`
+    },
+    {
+      keys: ['timeline','schedule','process','stages','steps','how long','announcement'],
+      answer: `Here is the complete election timeline in India:\n\n📅 Stage 1 — Announcement (Week 1-2):\nElection Commission announces dates. MCC comes into force immediately.\n\n📋 Stage 2 — Nominations (Week 2-3):\nCandidates file papers. Scrutiny by Returning Officer. Withdrawal period.\n\n📢 Stage 3 — Campaigning (Week 3-5):\nParties and candidates campaign. Strict rules apply. Silent period 48 hrs before polling.\n\n🗳️ Stage 4 — Polling Day:\nVoters cast votes at booths. EVM + VVPAT records votes. 7 AM to 6 PM.\n\n📊 Stage 5 — Counting & Results:\nEVMs opened, votes counted round by round. Winner declared by Returning Officer.\n\nThe total process from announcement to results typically takes 4-6 weeks.\n\nWould you like to know more about any specific stage? 😊`
+    },
+    {
+      keys: ['eligible','eligibility','qualify','can i vote','age','citizen','who can vote'],
+      answer: `Here are the voter eligibility criteria in India:\n\n✅ You CAN vote if you are:\n• An Indian citizen\n• 18 years or older on the qualifying date (1st January of the year)\n• Ordinarily resident in the constituency\n• Name enrolled in the Electoral Roll\n\n❌ You CANNOT vote if you are:\n• A non-citizen\n• Declared of unsound mind by a court\n• Convicted and serving imprisonment\n• Debarred under any election law\n\n📝 Note: You can register even if you just turned 18. NRIs with valid Indian passports can also register in their home constituency.\n\nWould you like to know how to register as a voter? 😊`
+    },
+    {
+      keys: ['away','different city','transfer','migrant','out of state','not in constituency'],
+      answer: `If you are away from your home constituency on polling day:\n\n• Unfortunately, you CANNOT vote from a different location under normal circumstances\n• Your vote is tied to the constituency where you are registered\n\n🏠 Options:\n1. Travel back to your constituency to vote\n2. Apply for transfer of your voter registration to your current address (Form 8A)\n3. Postal ballot is available for certain categories: armed forces, government officials on duty, senior citizens (80+), and persons with disabilities\n\n📱 Apply for address change at voterportal.eci.gov.in before the electoral roll revision deadline.\n\nWould you like to know how to update your voter registration address? 😊`
+    },
+    {
+      keys: ['id','identity','document','bring','carry','proof'],
+      answer: `Documents you can carry to the polling booth as identity proof:\n\n✅ Approved Photo IDs (any one):\n1. EPIC (Voter ID Card) — most preferred\n2. Aadhaar Card\n3. Passport\n4. Driving Licence\n5. PAN Card\n6. MNREGA Job Card\n7. Bank / Post Office Passbook with photo\n8. Health Insurance Smart Card\n9. Pension document with photo\n10. Official identity cards issued by Central/State Government\n\nYour name must be on the electoral roll — the ID only proves your identity at the booth.\n\nWould you like to know what happens step by step at the polling booth? 😊`
     }
-    else if (q.includes("timeline") || q.includes("election")) {
-      reply = "Election process:\nRegistration → Campaign → Voting → Counting → Results\n\nWhich part would you like to explore?";
-    }
-    else {
-      reply = "I can help you with voter registration, voting process, EVMs, or election timelines. What would you like to know?";
-    }
+  ];
 
-    addMsg('Assistant', reply);
-  }, 800);
-}
-</script>
+  function getAnswer(input) {
+    const q = input.toLowerCase();
+    for (const item of kb) {
+      if (item.keys.some(k => q.includes(k))) {
+        return item.answer;
+      }
+    }
+    return `Great question! Here are some topics I can help you with:\n\n• 📋 Voter Registration — how to register, Form 6, documents needed\n• ✅ Voter Eligibility — age, citizenship, requirements\n• 🗳️ Polling Day — booth process, what to carry, timings\n• 🖥️ EVM & VVPAT — how voting machines work\n• 📊 Vote Counting — how results are declared\n• ⚖️ Model Code of Conduct — rules during elections\n• 🏛️ Election Commission — who runs elections\n• 👤 Nominations — how candidates file papers\n• 📅 Election Timeline — full process from start to finish\n• 🏙️ Voting away from home — options available\n\nTry asking about any of these topics! 😊`;
+  }
+
+  function sendMsg(override) {
+    const text = (override || chatInput.value).trim();
+    if (!text) return;
+    chatInput.value = '';
+    document.getElementById('suggestions').style.display = 'none';
+
+    addMsg('user', text);
+
+    showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const reply = getAnswer(text);
+      addMsg('ai', reply);
+    }, 800);
+  }
+
+  function ask(q) {
+    chatInput.value = q;
+    sendMsg();
+    document.getElementById('chatPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+</body>
+</html>
